@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -10,12 +11,15 @@ namespace PasswordChecker
     {
         static void Main(string[] args)
         {
-            Console.WriteLine(GetValidPasswordsNumber(new ArrayList
+            var filePath = "..\\..\\passwords.txt";
+ 
+            if (!File.Exists(filePath))
             {
-                "1-3 a: abcde",
-                "1-3 b: cdefg",
-                "2-9 c: ccccccccc"
-            }));
+                Console.WriteLine("File does not exist: {0}", filePath);
+                return;
+            }
+
+            Console.WriteLine(GetValidPasswordsNumber(new ArrayList(File.ReadAllLines(filePath))));
         }
 
         private static int GetValidPasswordsNumber(ArrayList passwords)
