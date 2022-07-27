@@ -10,28 +10,25 @@ namespace PasswordChecker
     {
         static void Main(string[] args)
         {
-            PrintValidPasswords(new ArrayList
+            Console.WriteLine(GetValidPasswordsNumber(new ArrayList
             {
                 "1-3 a: abcde",
                 "1-3 b: cdefg",
                 "2-9 c: ccccccccc"
-            });
+            }));
         }
 
-        private static void PrintValidPasswords(ArrayList passwords)
+        private static int GetValidPasswordsNumber(ArrayList passwords)
         {
-            foreach (var clean in from string password in passwords
-                   let clean = Regex.Replace(password, "[-:]", " ")
-                      .Split(' ')
-                      .Where(s => !string.IsNullOrWhiteSpace(s))
-                      .Distinct()
-                      .ToList()
+            return (from string password in passwords
+                    let clean = Regex.Replace(password, "[-:]", " ")
+                        .Split(' ')
+                        .Where(s => !string.IsNullOrWhiteSpace(s))
+                        .Distinct()
+                        .ToList()
                     let m = new Regex(clean[2]).Matches(clean[3])
                     where IsValidPassword(clean, m)
-                    select clean)
-            {
-                Console.WriteLine(clean[3] + " is a valid password!");
-            }
+                    select password).Count();
         }
 
         private static bool IsValidPassword(List<string> clean, MatchCollection m)
